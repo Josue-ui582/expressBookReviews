@@ -11,7 +11,20 @@ app.use(express.json());
 app.use("/customer",session({secret:"fingerprint_customer",resave: true, saveUninitialized: true}))
 
 app.use("/customer/auth/*", function auth(req,res,next){
-//Write the authenication mechanism here
+    if (req.session && req.session.authorization) {
+        const token = req.session.authorization["accessToken"];
+
+        jwt.verify(token, "access", (err, user) => {
+            if (!err) {
+                req.user = user;
+                next();
+            }else {
+                return res.status(403).json({message : "Utilisateur non authentifié ou jeton invalide"});
+            }
+        });
+    }else {
+        return res.status(403).json({message: "Connexion requise : aucun jeton trouvé"})
+    }
 });
  
 const PORT =5000;
