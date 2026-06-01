@@ -101,25 +101,37 @@ public_users.get('/author/:author', async function (req, res) {
   }
 });
 
-// Get all books based on title
-public_users.get('/title/:title', function (req, res) {
+// Task 13: Get all books based on title using Async-Await and Promises
+public_users.get('/title/:title', async function (req, res) {
   const title = req.params.title;
-  const keys = Object.keys(books);
-  let filteredBook = [];
 
-  for (let i = 0; i < keys.length; i++) {
-    const key = keys[i];
-    const book = books[key];
-    if (book.title === title) {
-      filteredBook.push(book);
-    }
-  }
+  try {
+    const getBooksByTitlePromise = new Promise((resolve, reject) => {
+      const keys = Object.keys(books);
+      let filteredBook = [];
 
-  if (filteredBook.length > 0) {
+      for (let i = 0; i < keys.length; i++) {
+        const key = keys[i];
+        const book = books[key];
+        if (book.title === title) {
+          filteredBook.push(book);
+        }
+      }
+
+      if (filteredBook.length > 0) {
+        resolve(filteredBook);
+      } else {
+        reject(new Error("No book found for this title"));
+      }
+    });
+
+    const matchingTitleBooks = await getBooksByTitlePromise;
+
     res.setHeader("Content-Type", "application/json");
-    return res.status(200).send(JSON.stringify(filteredBook, null, 4));
-  } else {
-    return res.status(400).json({ message: "No book found for this title" })
+    return res.status(200).send(JSON.stringify(matchingTitleBooks, null, 4));
+
+  } catch (error) {
+    return res.status(404).json({ message: error.message });
   }
 });
 
