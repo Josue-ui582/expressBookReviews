@@ -2,6 +2,7 @@ const express = require('express');
 let books = require("./booksdb.js");
 let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
+const axios = require('axios'); // Requis pour les Tâches 10-13 avec Axios
 const public_users = express.Router();
 
 
@@ -21,15 +22,25 @@ public_users.post("/register", (req, res) => {
   return res.status(201).json({message : "user register successfuly. You can now connect"})
 });
 
-// Get the book list available in the shop
-public_users.get('/', function (req, res) {
-  let bookList = Object.values(books);
+// Task 10: Get the book list available in the shop using Async-Await and Promises
+public_users.get('/', async function (req, res) {
+  try {
+    const getBooksPromise = new Promise((resolve, reject) => {
+      let bookList = Object.values(books);
+      if (bookList.length > 0) {
+        resolve(bookList);
+      } else {
+        reject(new Error("No books found"));
+      }
+    });
 
-  if (bookList.length > 0) {
+    const bookList = await getBooksPromise;
+    
     res.setHeader("Content-Type", "application/json");
-    res.status(200).send(JSON.stringify(bookList, null, 4));
-  } else {
-    return res.status(404).json({ message: "No books found" });
+    return res.status(200).send(JSON.stringify(bookList, null, 4));
+
+  } catch (error) {
+    return res.status(404).json({ message: error.message });
   }
 });
 
