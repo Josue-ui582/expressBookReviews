@@ -1,10 +1,6 @@
-curl -X PUT "http://localhost:5000/customer/auth/review/1?review=Excellent%20livre" \
-     -H "Authorization: Bearer accessToken"
+curl -X PUT "http://localhost:5000/review/1?review=Excellent+book" -H "Authorization: Bearer accessToken"
 
 
 {
-    "message": "L'avis de l'utilisateur 'josue' pour l'ISBN 1 a été enregistré avec succès.",
-    "reviews": {
-        "josue": "Excellent livre"
-    }
+    "message": "Review for ISBN 1 added/updated successfully."
 }

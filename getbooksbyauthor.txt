@@ -1,24 +1,9 @@
-curl http://localhost:5000/author/Unknown > getbooksbyauthor.txt
+curl http://localhost:5000/author?author=Chinua+Achebe > getbooksbyauthor.txt
 
 [
     {
-        "author": "Unknown",
-        "title": "The Epic Of Gilgamesh",
-        "reviews": {}
-    },
-    {
-        "author": "Unknown",
-        "title": "The Book Of Job",
-        "reviews": {}
-    },
-    {
-        "author": "Unknown",
-        "title": "One Thousand and One Nights",
-        "reviews": {}
-    },
-    {
-        "author": "Unknown",
-        "title": "Njál's Saga",
+        "author": "Chinua Achebe",
+        "title": "Things Fall Apart",
         "reviews": {}
     }
 ]
